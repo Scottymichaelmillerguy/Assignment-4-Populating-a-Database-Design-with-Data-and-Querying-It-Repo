@@ -14,19 +14,20 @@ END LOOP;
 
 END;
 /
-
+DROP VIEW store_item_vw;
 
 
 --Create all tables
-DROP TABLE IF EXISTS Grocery_Store;
+--DROP TABLE Grocery_Store;
+
 CREATE TABLE Grocery_Store (
     store_id INT PRIMARY KEY,
     name VARCHAR2(100),
     store_state CHAR(2),
-    store_city VARCHAR2(100)
-   
+    store_city VARCHAR2(100),
+    FOREIGN KEY (store_id) REFERENCES Grocery_Store(store_id) ON DELETE CASCADE 
 );
-DROP TABLE IF EXISTS Item;
+--DROP TABLE Item;
 CREATE TABLE Item (
     item_id INT PRIMARY KEY,
     item_desc VARCHAR2(100),
@@ -34,21 +35,24 @@ CREATE TABLE Item (
     item_expiration_date DATE,
     item_price DECIMAL,
     store_id INT,
-    FOREIGN KEY (store_id) REFERENCES Grocery_Store(store_id) ON DELETE CASCADE ON UPDATE CASCADE
-
+    FOREIGN KEY (store_id) REFERENCES Grocery_Store(store_id) 
+    
 );
-DROP TABLE IF EXISTS Employee;
+--DROP TABLE Employee;
 CREATE TABLE Employee (
     employee_id INT PRIMARY KEY,
     manager_id INT,
     store_id INT,
-    FOREIGN KEY (store_id) REFERENCES Grocery_Store(store_id) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT employee_id
+    FOREIGN KEY (store_id) REFERENCES Grocery_Store(store_id) 
     
     
 );
 --An ALTER TABLE statement
 ALTER TABLE Employee
 ADD employee_name VARCHAR2(100) ;
+
+
 
 
 --Insert data into all of the tables
@@ -71,23 +75,23 @@ VALUES
 
 
 INSERT INTO item (item_id, item_desc, item_creation_date, item_expiration_date, item_price, store_id)
-VAlUES (1, "Apple", TO_DATE('2024-04-03', 'YYYY-MM-DD'), TO_DATE('2024-04-09', 'YYYY-MM-DD'), 1.99, 1002);
+VAlUES (1, 'Apple', TO_DATE('2024-04-03', 'YYYY-MM-DD'), TO_DATE('2024-04-09', 'YYYY-MM-DD'), 1.99, 1002);
 INSERT INTO item (item_id, item_desc, item_creation_date, item_expiration_date, item_price, store_id)
-VAlUES (1, "Apple", TO_DATE('2024-04-03', 'YYYY-MM-DD'), TO_DATE('2024-04-09', 'YYYY-MM-DD'), 2.29, 1001);
+VAlUES (2, 'Apple', TO_DATE('2024-04-03', 'YYYY-MM-DD'), TO_DATE('2024-04-09', 'YYYY-MM-DD'), 2.29, 1001);
 INSERT INTO item (item_id, item_desc, item_creation_date, item_expiration_date, item_price, store_id)
-VAlUES (1, "Apple", TO_DATE('2024-04-03', 'YYYY-MM-DD'), TO_DATE('2024-04-09', 'YYYY-MM-DD'), 2.59, 1003);
+VAlUES (3, 'Apple', TO_DATE('2024-04-03', 'YYYY-MM-DD'), TO_DATE('2024-04-09', 'YYYY-MM-DD'), 2.59, 1003);
 INSERT INTO item (item_id, item_desc, item_creation_date, item_expiration_date, item_price, store_id)
-VAlUES (2, "Pear", TO_DATE('2024-04-03', 'YYYY-MM-DD'), TO_DATE('2024-04-08', 'YYYY-MM-DD'), 2.03, 1002);
+VAlUES (4, 'Pear', TO_DATE('2024-04-03', 'YYYY-MM-DD'), TO_DATE('2024-04-08', 'YYYY-MM-DD'), 2.03, 1002);
 INSERT INTO item (item_id, item_desc, item_creation_date, item_expiration_date, item_price, store_id)
-VAlUES (2, "Pear", TO_DATE('2024-04-03', 'YYYY-MM-DD'), TO_DATE('2024-04-08', 'YYYY-MM-DD'), 2.24, 1001);
+VAlUES (5, 'Pear', TO_DATE('2024-04-03', 'YYYY-MM-DD'), TO_DATE('2024-04-08', 'YYYY-MM-DD'), 2.24, 1001);
 INSERT INTO item (item_id, item_desc, item_creation_date, item_expiration_date, item_price, store_id)
-VAlUES (2, "Pear", TO_DATE('2024-04-03', 'YYYY-MM-DD'), TO_DATE('2024-04-08', 'YYYY-MM-DD'), 2.37, 1003);
+VAlUES (6, 'Pear', TO_DATE('2024-04-03', 'YYYY-MM-DD'), TO_DATE('2024-04-08', 'YYYY-MM-DD'), 2.37, 1003);
 INSERT INTO item (item_id, item_desc, item_creation_date, item_expiration_date, item_price, store_id)
-VAlUES (3, "Orange", TO_DATE('2024-04-03', 'YYYY-MM-DD'), TO_DATE('2024-04-17', 'YYYY-MM-DD'), 1.00, 1002)
+VAlUES (7, 'Orange', TO_DATE('2024-04-03', 'YYYY-MM-DD'), TO_DATE('2024-04-17', 'YYYY-MM-DD'), 1.00, 1002);
 INSERT INTO item (item_id, item_desc, item_creation_date, item_expiration_date, item_price, store_id)
-VAlUES (3, "Orange", TO_DATE('2024-04-03', 'YYYY-MM-DD'), TO_DATE('2024-04-17', 'YYYY-MM-DD'), 1.05, 1001)
+VAlUES (8, 'Orange', TO_DATE('2024-04-03', 'YYYY-MM-DD'), TO_DATE('2024-04-17', 'YYYY-MM-DD'), 1.05, 1001);
 INSERT INTO item (item_id, item_desc, item_creation_date, item_expiration_date, item_price, store_id)
-VAlUES (3, "Orange", TO_DATE('2024-04-03', 'YYYY-MM-DD'), TO_DATE('2024-04-17', 'YYYY-MM-DD'), 1.19, 1003)
+VAlUES (9, 'Orange', TO_DATE('2024-04-03', 'YYYY-MM-DD'), TO_DATE('2024-04-17', 'YYYY-MM-DD'), 1.19, 1003);
 
 INSERT INTO Employee (employee_id, manager_id, store_id, employee_name)
 VALUES (101, NULL, 1001, 'Manny');
@@ -122,18 +126,28 @@ VALUES (244, 102, 1003, 'Tammy');
 
 --An UPDATE statement
 UPDATE Item 
-SET price = 1.29 
+SET item_price = 1.29 
 WHERE item_id = 1
 AND store_id = 1002; 
 
 --A Create VIEW statement a select with a join
-DROP VIEW IF EXISTS store_item_vw;
+
+
 CREATE VIEW store_item_vw AS 
-SELECT * FROM grocery_store g
-INNER JOIN ON item i 
+SELECT g.store_id
+, g.name
+, g.store_state
+, g.store_city
+, i.item_id
+, i.item_desc 
+FROM grocery_store g
+INNER JOIN item i 
 ON g.store_id = i.store_id;
 
-SELECT * FROM store_item_vw;
+
 
 --DELETE prevented by CASCADE
+
 DELETE FROM grocery_store WHERE store_id = 1001;
+
+

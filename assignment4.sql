@@ -43,7 +43,7 @@ CREATE TABLE Employee (
     employee_id INT PRIMARY KEY,
     manager_id INT,
     store_id INT,
-    CONSTRAINT employee_id
+    CONSTRAINT employee_id --
     FOREIGN KEY (store_id) REFERENCES Grocery_Store(store_id) 
     
     
@@ -55,7 +55,7 @@ ADD employee_name VARCHAR2(100) ;
 
 
 
---Insert data into all of the tables
+--Insert data into all of the tables at least 10 rows total 
 /* INSERT INTO table_name (column1, column2, column3, ...)
 VALUES (value1, value2, value3,...)
 */
@@ -130,7 +130,8 @@ SET item_price = 1.29
 WHERE item_id = 1
 AND store_id = 1002; 
 
---A Create VIEW statement a select with a join
+--A Create VIEW statement 
+--a select with a join
 
 
 CREATE VIEW store_item_vw AS 
@@ -146,8 +147,13 @@ ON g.store_id = i.store_id;
 
 
 
---DELETE prevented by CASCADE
-
+--DELETE prevented by CASCADE, this was the most challenging thing of all
+--Says it was caused by employee table, so parent table 
 DELETE FROM grocery_store WHERE store_id = 1001;
 
 
+/* 
+so parent_table FOREIGN KEY (parent_table_pk) parent_table REFERENCES (parent_table_pk) ON DELETE CASCADE 
+child table constraint child_table_pk 
+FOREIGN KEY (parent_table_pk) REFERENCES parent_table(parent_table_pk) 
+*/
